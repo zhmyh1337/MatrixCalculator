@@ -6,26 +6,26 @@ namespace Utilities
     static class Misc
     {
         /// <summary>
-        /// This method parses type <typeparamref name="T"/> from string <paramref name="input"/>.
-        /// If an error occurs while parsing, throws <see cref="FormatException"/>.
+        /// This method casts <paramref name="input"/> to <typeparamref name="T"/>.
+        /// If an error occurs while casting, throws <see cref="InvalidCastException"/>.
         /// </summary>
-        /// <returns>Parsed value.</returns>
-        /// <exception cref="FormatException"/>
-        /// <exception cref="NullReferenceException"/>
-        public static T ParseGeneric<T>(this string input)
+        /// <exception cref="InvalidCastException"/>
+        public static T ChangeType<T>(object input)
         {
             try
             {
-                var converter = TypeDescriptor.GetConverter(typeof(T));
-                return (T)converter.ConvertFromString(input);
-            }
-            catch (NotSupportedException)
-            {
-                throw new FormatException();
+                if (typeof(T).IsEnum)
+                {
+                    return (T)Enum.ToObject(typeof(T), input);
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(input, typeof(T));
+                }
             }
             catch
             {
-                throw;
+                throw new InvalidCastException();
             }
         }
     }

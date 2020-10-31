@@ -21,7 +21,7 @@ namespace Utilities
                 }
                 try
                 {
-                    var parsed = Misc.ParseGeneric<T>(Console.ReadLine());
+                    var parsed = Misc.ChangeType<T>(Console.ReadLine());
 
                     if (checker != null && !checker(parsed))
                     {
