@@ -50,6 +50,7 @@ namespace Utilities
             T Subtract(T a, T b);
             T Multiply(T a, T b);
             T Divide(T a, T b);
+            bool IsZero(T value);
         }
 
         class IntMathProvider : IMathProvider<int>
@@ -72,6 +73,11 @@ namespace Utilities
             public int Divide(int a, int b)
             {
                 return a / b;
+            }
+
+            public bool IsZero(int value)
+            {
+                return value == 0;
             }
         }
 
@@ -96,6 +102,11 @@ namespace Utilities
             {
                 return a / b;
             }
+
+            public bool IsZero(long value)
+            {
+                return value == 0L;
+            }
         }
 
         class BigIntegerMathProvider : IMathProvider<BigInteger>
@@ -118,6 +129,11 @@ namespace Utilities
             public BigInteger Divide(BigInteger a, BigInteger b)
             {
                 return a / b;
+            }
+
+            public bool IsZero(BigInteger value)
+            {
+                return value.IsZero;
             }
         }
 
@@ -142,6 +158,11 @@ namespace Utilities
             {
                 return a / b;
             }
+
+            public bool IsZero(float value)
+            {
+                return value == 0f;
+            }
         }
 
         class DoubleMathProvider : IMathProvider<double>
@@ -165,6 +186,11 @@ namespace Utilities
             {
                 return a / b;
             }
+
+            public bool IsZero(double value)
+            {
+                return value == 0d;
+            }
         }
 
         class DecimalMathProvider : IMathProvider<decimal>
@@ -187,6 +213,11 @@ namespace Utilities
             public decimal Divide(decimal a, decimal b)
             {
                 return a / b;
+            }
+
+            public bool IsZero(decimal value)
+            {
+                return value == 0m;
             }
         }
     }
