@@ -11,6 +11,8 @@ namespace MatrixCalculator
 
         public bool HasTrace() => IsSquare();
 
+        public bool HasDeterminant() => IsSquare();
+
         public bool IsSummableBy<T1>(Matrix<T1> other)
         {
             return typeof(T) == typeof(T1) && _rows == other._rows && _columns == other._columns;

@@ -81,5 +81,16 @@
             }
             return result;
         }
+
+        public T Determinant()
+        {
+            var canonical = GaussianMethod();
+            var det = canonical._data[0, 0];
+            for (int i = 1; i < _rows; i++)
+            {
+                det = _mathProvider.Multiply(det, canonical._data[i, i]);
+            }
+            return det;
+        }
     }
 }
