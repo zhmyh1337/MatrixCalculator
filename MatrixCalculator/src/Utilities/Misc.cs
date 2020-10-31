@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace Utilities
 {
@@ -17,6 +16,11 @@ namespace Utilities
                 if (typeof(T).IsEnum)
                 {
                     return (T)Enum.ToObject(typeof(T), input);
+                }
+                else if (typeof(T) == typeof(System.Numerics.BigInteger))
+                {
+                    // This works only with integers.
+                    return (T)(object)System.Numerics.BigInteger.Parse(input.ToString());
                 }
                 else
                 {

@@ -122,6 +122,10 @@ namespace MatrixCalculator
             {
                 Console.WriteLine("The file does not exist.");
             }
+            catch (OutOfMemoryException)
+            {
+                Console.WriteLine("Not enough memory to store the matrix.");
+            }
             catch (Exception e) when (
                 e is FormatException ||
                 e is InvalidCastException ||

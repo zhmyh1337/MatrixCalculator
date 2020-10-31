@@ -6,7 +6,7 @@ namespace MatrixCalculator
     {
         static void Main(string[] args)
         {
-            Matrix<decimal>.CreateFromConsoleInput();
+            var matrix = Matrix<string>.CreateRandomDouble(3, 3);
         }
     }
 }
