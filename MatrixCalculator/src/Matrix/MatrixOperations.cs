@@ -50,5 +50,36 @@
             }
             return result;
         }
+
+        public Matrix<T> Multiply(Matrix<T> other)
+        {
+            var result = new Matrix<T>(_rows, other._columns);
+            for (int i = 0; i < result._rows; i++)
+            {
+                for (int j = 0; j < result._columns; j++)
+                {
+                    T sum = default;
+                    for (int k = 0; k < _columns; k++)
+                    {
+                        sum = _mathProvider.Add(sum, _mathProvider.Multiply(_data[i, k], other._data[k, j]));
+                    }
+                    result._data[i, j] = sum;
+                }
+            }
+            return result;
+        }
+
+        public Matrix<T> Multiply(T value)
+        {
+            var result = new Matrix<T>(_rows, _columns);
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns; j++)
+                {
+                    result._data[i, j] = _mathProvider.Multiply(_data[i, j], value);
+                }
+            }
+            return result;
+        }
     }
 }
