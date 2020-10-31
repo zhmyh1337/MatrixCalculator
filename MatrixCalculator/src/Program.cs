@@ -6,7 +6,8 @@ namespace MatrixCalculator
     {
         static void Main(string[] args)
         {
-            var matrix = Matrix<string>.CreateRandomDouble(3, 3);
+            var ui = new UI.UI();
+            ui.Launch();
         }
     }
 }
