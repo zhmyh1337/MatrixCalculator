@@ -4,13 +4,23 @@ namespace MatrixCalculator
 {
     partial class Matrix<T>
     {
+        private Matrix(int rows, int columns)
+        {
+            _rows = rows;
+            _columns = columns;
+            _data = new T[rows, columns];
+        }
+
         private Matrix(int rows, int columns, T[,] data)
         {
             _rows = rows;
             _columns = columns;
             _data = data;
+        }
 
-            var x = _mathProvider.Add(_data[0, 0], _data[0, 1]);
+        private Matrix(Matrix<T> other)
+            : this(other._rows, other._columns, other._data.Clone() as T[,])
+        {
         }
 
         private readonly int _rows;
