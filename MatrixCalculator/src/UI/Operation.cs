@@ -5,13 +5,17 @@ namespace UI
 {
     class Operation
     {
-        public Operation(string name, Action callback)
+        public Operation(int id, string name, Action callback)
         {
-            _id = _idCounter++;
+            _id = id;
             _name = name;
             _callback = callback;
-
             _operationById[_id] = this;
+        }
+
+        public Operation(string name, Action callback)
+            : this(_idCounter++, name, callback)
+        {
         }
 
         public void Print()
