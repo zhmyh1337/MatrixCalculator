@@ -1,14 +1,18 @@
-﻿namespace UI
+﻿using System;
+using Utilities;
+
+namespace UI
 {
     class OperationHandlers<T>
     {
         public void Trace()
         {
-            var matrix = _matrixReader.ReadMatrix("valera", x => x.IsSquare(), "Matrix must be square.");
+            var matrix = _matrixReader.ReadMatrix(null, x => x.IsSquare(), "Matrix must be square.");
             if (matrix == null)
             {
                 return;
             }
+            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, $"Matrix trace: {matrix.Trace()}.");
         }
 
         public void Transpose()

@@ -5,6 +5,8 @@ namespace UI
 {
     static class UI<T>
     {
+        public const ConsoleColor EmphasizeColor = ConsoleColor.Yellow;
+
         public static void Launch()
         {
             Console.WriteLine("Input Ctrl+Z at any time while inputting to cancel.");

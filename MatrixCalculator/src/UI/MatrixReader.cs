@@ -1,7 +1,6 @@
 ﻿using MatrixCalculator;
 using System;
 using System.Linq;
-using System.Numerics;
 using Utilities;
 
 namespace UI
@@ -11,6 +10,13 @@ namespace UI
     /// </summary>
     class MatrixReader<T>
     {
+        private enum InputTypes
+        {
+            file = 0,
+            input,
+            random
+        }
+
         /// <summary>
         /// This method prompts the user to enter the matrix in one of the ways.
         /// </summary>
@@ -27,22 +33,13 @@ namespace UI
 
             while (true)
             {
-                var inputTypes = new string[] {
-                    null,
-                    "file",
-                    "input",
-                    "random"
-                };
-                var inputType = ConsoleExtensions.ForceSafeRead<string>(
-                    $"Choose how to read the matrix ({string.Join(", ", inputTypes.Skip(1))})",
-                    x => Array.IndexOf(inputTypes, x) != -1
-                );
+                var inputType = ConsoleExtensions.UserPromptNullable<InputTypes>("Choose how to read the matrix");
 
                 var matrix = inputType switch
                 {
-                    "file" => ReadFromFile(),
-                    "input" => ReadFromConsoleInput(),
-                    "random" => GenerateRandom(),
+                    InputTypes.file => ReadFromFile(),
+                    InputTypes.input => ReadFromConsoleInput(),
+                    InputTypes.random => GenerateRandom(),
                     _ => null,
                 };
 
@@ -77,6 +74,17 @@ namespace UI
                 }
                 matrix = Matrix<T>.CreateFromFile(filePath);
             }
+
+            var prompt = ConsoleExtensions.UserPromptNullable<ConsoleExtensions.PromptYesNo>("Print read matrix?");
+            if (prompt == null)
+            {
+                return null;
+            }
+            if (prompt == ConsoleExtensions.PromptYesNo.Yes)
+            {
+                matrix.Print();
+            }
+
             return matrix;
         }
 
@@ -123,6 +131,9 @@ namespace UI
 
                 matrix = Matrix<T>.CreateRandomInteger(rows.Value, columns.Value);
             }
+
+            Console.WriteLine("Randomized matrix:");
+            matrix.Print();
 
             return matrix;
         }
