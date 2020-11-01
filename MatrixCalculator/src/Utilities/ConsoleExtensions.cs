@@ -21,7 +21,16 @@ namespace Utilities
                 }
                 try
                 {
-                    var parsed = Misc.ChangeType<T>(Console.ReadLine());
+                    var type = typeof(T);
+                    var userInput = Console.ReadLine();
+                    T parsed = type.IsEnum ?
+                        (T)Enum.Parse(type, userInput) :
+                        Misc.ChangeType<T>(userInput);
+
+                    if (type.IsEnum && Enum.IsDefined(type, parsed))
+                    {
+                        throw new Exception("Enum value is not defined.");
+                    }
 
                     if (checker != null && !checker(parsed))
                     {

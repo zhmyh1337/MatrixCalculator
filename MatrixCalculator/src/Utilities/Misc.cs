@@ -13,7 +13,13 @@ namespace Utilities
         {
             try
             {
-                if (typeof(T).IsEnum)
+                // If it's nullable type with null value
+                // (Convert.ChangeType works incorrect in this case).
+                if (Nullable.GetUnderlyingType(typeof(T)) != null && input == null)
+                {
+                    return (T)(object)null;
+                }
+                else if (typeof(T).IsEnum)
                 {
                     return (T)Enum.ToObject(typeof(T), input);
                 }
@@ -24,7 +30,7 @@ namespace Utilities
                 }
                 else
                 {
-                    return (T)Convert.ChangeType(input, typeof(T));
+                    return (T)Convert.ChangeType(input, Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T));
                 }
             }
             catch

@@ -146,10 +146,19 @@ namespace MatrixCalculator
         {
             try
             {
-                var rows = ConsoleExtensions.ForceSafeRead<int>("rows", x => x > 0);
-                var columns = ConsoleExtensions.ForceSafeRead<int>("columns", x => x > 0);
+                var rows = ConsoleExtensions.ForceSafeRead<int?>("rows", x => x == null || x > 0);
+                if (rows == null)
+                {
+                    return null;
+                }
 
-                var data = new T[rows, columns];
+                var columns = ConsoleExtensions.ForceSafeRead<int?>("columns", x => x == null || x > 0);
+                if (columns == null)
+                {
+                    return null;
+                }
+
+                var data = new T[rows.Value, columns.Value];
                 for (int i = 0; i < rows; i++)
                 {
                     var line = Console.ReadLine();
@@ -170,7 +179,7 @@ namespace MatrixCalculator
                     }
                 }
 
-                return new Matrix<T>(rows, columns, data);
+                return new Matrix<T>(rows.Value, columns.Value, data);
             }
             catch (OutOfMemoryException)
             {

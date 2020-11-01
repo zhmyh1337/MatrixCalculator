@@ -1,42 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MatrixCalculator;
 
 namespace UI
 {
-    static class OperationHandlers
+    class OperationHandlers<T>
     {
-        public static void Trace()
+        public void Trace()
+        {
+            var matrix = _matrixReader.ReadMatrix();
+            if (matrix == null)
+            {
+                return;
+            }
+        }
+
+        public void Transpose()
+        {
+            
+        }
+
+        public void AddMatrices()
         {
 
         }
 
-        public static void Transpose()
+        public void SubtractMatrices()
         {
 
         }
 
-        public static void AddMatrices()
+        public void MultiplyMatrices()
         {
 
         }
 
-        public static void SubtractMatrices()
+        public void MultiplyMatrixByNumber()
         {
 
         }
 
-        public static void MultiplyMatrices()
-        {
-
-        }
-
-        public static void MultiplyMatrixByNumber()
-        {
-
-        }
-
-        public static void Determinant()
+        public void Determinant()
         {
 
         }
@@ -44,9 +49,11 @@ namespace UI
         /// <summary>
         /// System of linear algebraic equation.
         /// </summary>
-        public static void Slae()
+        public void Slae()
         {
-
+            
         }
+
+        private static readonly MatrixReader<T> _matrixReader = new MatrixReader<T>();
     }
 }

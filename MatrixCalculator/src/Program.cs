@@ -4,7 +4,9 @@
     {
         static void Main(string[] args)
         {
-            UI.UI.Launch();
+            // This generic type defines the type we will work with.
+            // E. g., the type of matrix elements or the type of multiplication factor.
+            UI.UI<double>.Launch();
         }
     }
 }
