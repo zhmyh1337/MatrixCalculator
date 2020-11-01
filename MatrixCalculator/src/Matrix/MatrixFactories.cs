@@ -142,23 +142,11 @@ namespace MatrixCalculator
             return null;
         }
 
-        public static Matrix<T> CreateFromConsoleInput()
+        public static Matrix<T> CreateFromConsoleInput(int rows, int columns)
         {
             try
             {
-                var rows = ConsoleExtensions.ForceSafeRead<int?>("rows", x => x == null || x > 0);
-                if (rows == null)
-                {
-                    return null;
-                }
-
-                var columns = ConsoleExtensions.ForceSafeRead<int?>("columns", x => x == null || x > 0);
-                if (columns == null)
-                {
-                    return null;
-                }
-
-                var data = new T[rows.Value, columns.Value];
+                var data = new T[rows, columns];
                 for (int i = 0; i < rows; i++)
                 {
                     var line = Console.ReadLine();
@@ -179,7 +167,7 @@ namespace MatrixCalculator
                     }
                 }
 
-                return new Matrix<T>(rows.Value, columns.Value, data);
+                return new Matrix<T>(rows, columns, data);
             }
             catch (OutOfMemoryException)
             {
@@ -191,7 +179,7 @@ namespace MatrixCalculator
                 e is OverflowException
             )
             {
-                Console.WriteLine("At least one element was not in the correct format.");
+                Console.WriteLine("At least one row/element was not in the correct format.");
             }
             catch
             {

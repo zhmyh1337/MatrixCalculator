@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MatrixCalculator;
-
-namespace UI
+﻿namespace UI
 {
     class OperationHandlers<T>
     {
         public void Trace()
         {
-            var matrix = _matrixReader.ReadMatrix();
+            var matrix = _matrixReader.ReadMatrix("valera", x => x.IsSquare(), "Matrix must be square.");
             if (matrix == null)
             {
                 return;
