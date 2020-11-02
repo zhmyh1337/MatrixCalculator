@@ -1,8 +1,12 @@
-﻿using System;
+﻿using MatrixCalculator;
+using System;
 using Utilities;
 
 namespace UI
 {
+    /// <summary>
+    /// This class provides user interface to matrix operations.
+    /// </summary>
     class OperationHandlers<T> where T : struct
     {
         public void Trace()
@@ -12,7 +16,7 @@ namespace UI
             {
                 return;
             }
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, $"Matrix trace: {matrix.Trace()}.");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, $"Matrix trace: {matrix.Trace()}.");
         }
 
         public void Transpose()
@@ -24,7 +28,7 @@ namespace UI
             }
 
             var result = matrix.Transpose();
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "Transposed matrix:");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "Transposed matrix:");
             result.Print(UI<T>.EmphasizeColor);
         }
 
@@ -43,12 +47,12 @@ namespace UI
 
             if (!matrixA.IsSummableBy(matrixB))
             {
-                ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "These matrices are not summable.");
+                ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "These matrices are not summable.");
                 return;
             }
 
             var result = matrixA.Add(matrixB);
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "Result matrix:");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "Result matrix:");
             result.Print(UI<T>.EmphasizeColor);
         }
 
@@ -67,12 +71,12 @@ namespace UI
 
             if (!matrixA.IsSubtractableBy(matrixB))
             {
-                ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "These matrices are not subtractable.");
+                ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "These matrices are not subtractable.");
                 return;
             }
 
             var result = matrixA.Substract(matrixB);
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "Result matrix:");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "Result matrix:");
             result.Print(UI<T>.EmphasizeColor);
         }
 
@@ -91,12 +95,12 @@ namespace UI
 
             if (!matrixA.IsMultipliableBy(matrixB))
             {
-                ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "These matrices are not multipliable.");
+                ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "These matrices are not multipliable.");
                 return;
             }
 
             var result = matrixA.Multiply(matrixB);
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "Result matrix:");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "Result matrix:");
             result.Print(UI<T>.EmphasizeColor);
         }
 
@@ -121,7 +125,7 @@ namespace UI
             }
 
             var result = matrix.Multiply(factor.Value);
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, "Result matrix:");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, "Result matrix:");
             result.Print(UI<T>.EmphasizeColor);
         }
 
@@ -132,7 +136,7 @@ namespace UI
             {
                 return;
             }
-            ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, $"Matrix determinant: {matrix.Determinant()}.");
+            ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, $"Matrix determinant: {matrix.Determinant()}.");
         }
 
         /// <summary>
@@ -140,7 +144,18 @@ namespace UI
         /// </summary>
         public void Slae()
         {
-            
+            var slae = _matrixReader.ReadMatrix("todo", x => x.CorrectSlae(), "This matrix is not a SLAE.");
+            if (slae == null)
+            {
+                return;
+            }
+
+            var slaeSolution = new Matrix<T>.SlaeSolution(slae);
+            slaeSolution.PrintSolution(
+                x => ConsoleExtensions.PrintColor(UI<T>.EmphasizeColor, x),
+                x => ConsoleExtensions.PrintLineColor(UI<T>.EmphasizeColor, x),
+                Matrix<T>.PrintFormat
+            );
         }
 
         private static readonly MatrixReader<T> _matrixReader = new MatrixReader<T>();

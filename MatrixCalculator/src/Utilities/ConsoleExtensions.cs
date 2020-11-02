@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Utilities
 {
     static class ConsoleExtensions
     {
+        private class InsideCheckerException : Exception 
+        {
+            public InsideCheckerException(string message, Exception innerException)
+                : base(message, innerException)
+            {
+            }
+        }
+
         /// <summary>
 		/// This method forces the user to input a value of type <typeparamref name="T"/>
         /// while <paramref name="checker"/> predicate is not positive.
@@ -34,12 +41,28 @@ namespace Utilities
                         throw new Exception("Enum value is not defined.");
                     }
 
-                    if (checker != null && !checker(parsed))
+                    if (checker != null)
                     {
-                        throw new Exception("Predicate failed.");
+                        bool checkerResult;
+                        try
+                        {
+                            checkerResult = checker(parsed);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new InsideCheckerException("An error occured inside checker.", e);
+                        }
+                        if (!checkerResult)
+                        {
+                            throw new Exception("Predicate failed.");
+                        }
                     }
 
                     return parsed;
+                }
+                catch (InsideCheckerException)
+                {
+                    throw;
                 }
                 catch
                 {
@@ -110,11 +133,24 @@ namespace Utilities
             return (T?)Enum.Parse(typeof(T), userInput, ignoreCase);
         }
 
-        public static void PrintColor(ConsoleColor color, string message)
+        public static void PrintLineColor(ConsoleColor color, string message)
         {
             var wasColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
             Console.WriteLine(message);
+            Console.ForegroundColor = wasColor;
+        }
+
+        public static void PrintLineColor(ConsoleColor color, string message, params string[] args)
+        {
+            PrintLineColor(color, string.Format(message, args));
+        }
+
+        public static void PrintColor(ConsoleColor color, string message)
+        {
+            var wasColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.Write(message);
             Console.ForegroundColor = wasColor;
         }
 

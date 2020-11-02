@@ -6,10 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="bin\Debug\netcoreapp3.1\matrix.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Folder Include="bin\Debug\netcoreapp3.1\" />
     <Folder Include="obj\" />
   </ItemGroup>
 

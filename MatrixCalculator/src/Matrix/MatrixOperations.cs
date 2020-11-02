@@ -1,4 +1,7 @@
-﻿namespace MatrixCalculator
+﻿using System;
+using System.Linq;
+
+namespace MatrixCalculator
 {
     partial class Matrix<T>
     {
@@ -84,13 +87,125 @@
 
         public T Determinant()
         {
-            var canonical = GaussianMethod();
-            var det = canonical._data[0, 0];
-            for (int i = 1; i < _rows; i++)
+            var det = Utilities.Misc.ChangeType<T>(1);
+            var minusOne = Utilities.Misc.ChangeType<T>(-1);
+
+            var canonical = GaussianMethod(
+                swapRowsCallback:    (_1, _2) => det = _mathProvider.Multiply(det, minusOne),
+                swapColumnsCallback: (_1, _2) => det = _mathProvider.Multiply(det, minusOne),
+                divideRowByValueCallback:   x => det = _mathProvider.Multiply(det, x)
+            );
+            for (int i = 0; i < _rows; i++)
             {
                 det = _mathProvider.Multiply(det, canonical._data[i, i]);
             }
             return det;
+        }
+
+        public class SlaeSolution
+        {
+            public SlaeSolution(Matrix<T> slae)
+            {
+                VariableCount = slae._columns - 1;
+                // x1, x2, ..., xn.
+                VariableNames = Enumerable.Range(1, VariableCount).Select(x => $"x{x}").ToArray();
+
+                // When we swap two columns, the variables representing them are swapped either.
+                slae = slae.GaussianMethod(
+                    swapColumnsCallback: (i, j) => (VariableNames[i], VariableNames[j]) = (VariableNames[j], VariableNames[i])
+                );
+
+                for (_mainVariables = 0; _mainVariables < slae._rows; _mainVariables++)
+                {
+                    bool allZero = true;
+                    for (int j = 0; j < VariableCount; j++)
+                    {
+                        allZero &= _mathProvider.IsZero(slae._data[_mainVariables, j]);
+                    }
+                    if (allZero)
+                    {
+                        break;
+                    }
+                }
+                _oneSolution = _mainVariables == VariableCount;
+                _freeVariables = VariableCount - _mainVariables;
+
+                _hasSolution = true;
+                for (int i = _mainVariables; i < slae._rows; i++)
+                {
+                    if (!_mathProvider.IsZero(slae._data[i, VariableCount]))
+                    {
+                        _hasSolution = false;
+                        return;
+                    }
+                }
+
+                _particularSolution = new Utilities.Vector<T>(Enumerable.Range(0, VariableCount).
+                    Select(x => x >= slae._rows ? Utilities.Misc.ChangeType<T>(0) : slae._data[x, VariableCount])
+                );
+
+                _solution = new (Utilities.Vector<T>, string)[_freeVariables];
+                for (int i = 0; i < _freeVariables; i++)
+                {
+                    _solution[i].Item2 = VariableNames[i + _mainVariables];
+                    _solution[i].Item1 = new Utilities.Vector<T>(VariableCount);
+                    for (int j = 0; j < _mainVariables; j++)
+                    {
+                        _solution[i].Item1.Data[j] = slae._data[j, i + _mainVariables];
+                        _solution[i].Item1.Data[i + _mainVariables] = Utilities.Misc.ChangeType<T>(1);
+                    }
+                }
+            }
+
+            public void PrintSolution(Action<string> writer, Action<string> writeLiner, string valueFormat)
+            {
+                if (!_hasSolution)
+                {
+                    writeLiner("This SLAE has no solutions.");
+                    return;
+                }
+                if (_oneSolution)
+                {
+                    writeLiner("This SLAE has one solution:");
+                    for (int i = 0; i < VariableCount; i++)
+                    {
+                        writeLiner($"{VariableNames[i]} = {_particularSolution.Value.Data[i]}");
+                    }
+                    return;
+                }
+                writeLiner("Solution for this SLAE in vector form:");
+
+                var maxNameLength = VariableNames.Max(x => x.Length);
+                var leftVector = new Utilities.Vector<string>(VariableNames);
+
+                var centerLine = (VariableCount - 1) / 2;
+                Action<int, string> printSeparator = (line, separator) =>
+                    writer(line == centerLine ? separator : new string(' ', separator.Length));
+
+                for (int i = 0; i < VariableCount; i++)
+                {
+                    leftVector.PrintByRow(i, $",{-maxNameLength}", writer);
+                    printSeparator(i, "=");
+                    _particularSolution.Value.PrintByRow(i, valueFormat, writer);
+
+                    foreach (var item in _solution)
+                    {
+                        printSeparator(i, $"-{item.Item2}");
+                        item.Item1.PrintByRow(i, valueFormat, writer);
+                    }
+                    writeLiner("");
+                }
+            }
+
+            public int VariableCount { get; }
+            public string[] VariableNames { get; set; }
+
+            private readonly bool _hasSolution;
+            private readonly bool _oneSolution;
+            private readonly int _mainVariables;
+            private readonly int _freeVariables;
+            private readonly (Utilities.Vector<T>, string)[] _solution = null;
+            private readonly Utilities.Vector<T>? _particularSolution = null;
         }
     }
 }

@@ -31,8 +31,15 @@ namespace UI
             while (true)
             {
                 Operation.PrintAll();
-                ConsoleExtensions.ForceSafeRead<int>("Enter operation number to proceed",
-                    x => Operation.TryToExecuteOperationWithId(x));
+                try
+                {
+                    ConsoleExtensions.ForceSafeRead<int>("Enter operation number to proceed",
+                        x => Operation.TryToExecuteOperationWithId(x));
+                }
+                catch
+                {
+                    Console.WriteLine("An unknown error occurred during the operation.");
+                }
                 Console.WriteLine();
             }
         }

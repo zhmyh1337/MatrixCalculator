@@ -32,17 +32,14 @@ namespace MatrixCalculator
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    Console.Write(
-                        string.Format("{{0,{0}:{1}{2}}} ",
-                            PrintFormatLength, PrintFormatSpecifier, PrintFormatFloatingPoint
-                        ),
-                        _data[i, j]
-                    );
+                    Console.Write($"{{0{PrintFormat}}} ", _data[i, j]);
                 }
                 Console.WriteLine();
             }
             Console.ForegroundColor = wasColor;
         }
+
+        public static string PrintFormat { get; set; } = $",{PrintFormatLength}:{PrintFormatSpecifier}{PrintFormatFloatingPoint}";
 
         private const int PrintFormatLength = 8;
         private const char PrintFormatSpecifier = 'G';

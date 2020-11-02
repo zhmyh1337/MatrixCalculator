@@ -1,11 +1,15 @@
-﻿namespace MatrixCalculator
+﻿using System;
+
+namespace MatrixCalculator
 {
     partial class Matrix<T>
     {
         /// <summary>
         /// This method applies the Gaussian method on the matrix and returns the matrix in canonical form.
         /// </summary>
-        public Matrix<T> GaussianMethod()
+        public Matrix<T> GaussianMethod(Action<int, int> swapRowsCallback = null, 
+            Action<int, int> swapColumnsCallback = null,
+            Action<T> divideRowByValueCallback = null)
         {
             var result = new Matrix<T>(this);
 
@@ -23,15 +27,51 @@
                         }
                     }
 
-                    // No such _rows.
+                    // No such rows.
                     if (k == result._rows)
                     {
-//                         PrintSteps($"Skip column {j + 1}.");
-                        j++;
+                        bool notNullAbove = false;
+                        for (k = 0; k < i; k++)
+                        {
+                            notNullAbove |= !_mathProvider.IsZero(result._data[k, j]);
+                        }
+
+                        if (notNullAbove)
+                        {
+                            for (k = j + 1; k < result._columns; ++k)
+                            {
+                                if (!_mathProvider.IsZero(result._data[i, k]))
+                                {
+                                    break;
+                                }
+                            }
+
+                            // No such columns.
+                            if (k == result._columns)
+                            {
+//                                 PrintSteps($"Skip column {j + 1}.");
+                                j++;
+                            }
+                            else
+                            {
+                                swapColumnsCallback?.Invoke(j, k);
+//                                 PrintSteps($"Swap columns {j + 1} and {k + 1}.");
+                                for (int l = 0; l < result._rows; l++)
+                                {
+                                    (result._data[l, j], result._data[l, k]) = (result._data[l, k], result._data[l, j]);
+                                }
+                            }
+                        }
+                        else
+                        {
+//                             PrintSteps($"Skip column {j + 1}.");
+                            j++;
+                        }
                     }
                     else
                     {
-//                         PrintSteps($"Swap _rows {i + 1} and {k + 1}.");
+                        swapRowsCallback?.Invoke(i, k);
+//                         PrintSteps($"Swap rows {i + 1} and {k + 1}.");
                         for (int l = j; l < result._columns; l++)
                         {
                             (result._data[i, l], result._data[k, l]) = (result._data[k, l], result._data[i, j]);
@@ -41,6 +81,7 @@
                 else
                 {
                     T coeff = result._data[i, j];
+                    divideRowByValueCallback?.Invoke(coeff);
 //                     PrintSteps($"M[{i + 1}] /= {coeff}.");
                     for (int k = j; k < result._columns; ++k)
                     {
