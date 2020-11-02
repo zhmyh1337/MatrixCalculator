@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MatrixCalculator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace Utilities
             Data = data.ToArray();
         }
 
-        public void PrintByRow(int row, string format, Action<string> writer)
+        public void PrintByRow(int row, string format, Action<string> writer, bool considerAsMatrixValue = false)
         {
             if (row == 0)
             {
@@ -36,7 +37,11 @@ namespace Utilities
                 writer("│");
             }
 
-            writer(string.Format($"{{0{format}}}", Data[row]));
+            writer(string.Format($"{{0{format}}}",
+                considerAsMatrixValue ?
+                Matrix<T>.MathProvider.ZeroIfTiny(Data[row]) :
+                Data[row]
+            ));
 
             if (row == 0)
             {

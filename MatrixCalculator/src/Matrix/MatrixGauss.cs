@@ -7,9 +7,11 @@ namespace MatrixCalculator
         /// <summary>
         /// This method applies the Gaussian method on the matrix and returns the matrix in canonical form.
         /// </summary>
-        public Matrix<T> GaussianMethod(Action<int, int> swapRowsCallback = null, 
+        public Matrix<T> GaussianMethod(
+            Action<int, int> swapRowsCallback = null, 
             Action<int, int> swapColumnsCallback = null,
-            Action<T> divideRowByValueCallback = null)
+            Action<T> divideRowByValueCallback = null,
+            bool allowColumnSwapWithLast = true)
         {
             var result = new Matrix<T>(this);
 
@@ -38,27 +40,30 @@ namespace MatrixCalculator
 
                         if (notNullAbove)
                         {
-                            for (k = j + 1; k < result._columns; ++k)
+                            int foundColumn = -1;
+                            for (k = j + 1; k < result._columns - (allowColumnSwapWithLast ? 0 : 1); ++k)
                             {
                                 if (!_mathProvider.IsZero(result._data[i, k]))
                                 {
+                                    foundColumn = k;
                                     break;
                                 }
                             }
 
                             // No such columns.
-                            if (k == result._columns)
+                            if (foundColumn == -1)
                             {
 //                                 PrintSteps($"Skip column {j + 1}.");
                                 j++;
                             }
                             else
                             {
-                                swapColumnsCallback?.Invoke(j, k);
+                                swapColumnsCallback?.Invoke(j, foundColumn);
 //                                 PrintSteps($"Swap columns {j + 1} and {k + 1}.");
                                 for (int l = 0; l < result._rows; l++)
                                 {
-                                    (result._data[l, j], result._data[l, k]) = (result._data[l, k], result._data[l, j]);
+                                    (result._data[l, j], result._data[l, foundColumn]) = 
+                                        (result._data[l, foundColumn], result._data[l, j]);
                                 }
                             }
                         }

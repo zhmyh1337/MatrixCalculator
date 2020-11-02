@@ -32,7 +32,7 @@ namespace MatrixCalculator
             {
                 for (int j = 0; j < _columns; j++)
                 {
-                    Console.Write($"{{0{PrintFormat}}} ", _data[i, j]);
+                    Console.Write($"{{0{PrintFormat}}} ", _mathProvider.ZeroIfTiny(_data[i, j]));
                 }
                 Console.WriteLine();
             }

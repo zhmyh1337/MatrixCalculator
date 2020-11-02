@@ -112,7 +112,8 @@ namespace MatrixCalculator
 
                 // When we swap two columns, the variables representing them are swapped either.
                 slae = slae.GaussianMethod(
-                    swapColumnsCallback: (i, j) => (VariableNames[i], VariableNames[j]) = (VariableNames[j], VariableNames[i])
+                    swapColumnsCallback: (i, j) => (VariableNames[i], VariableNames[j]) = (VariableNames[j], VariableNames[i]),
+                    allowColumnSwapWithLast: false
                 );
 
                 for (_mainVariables = 0; _mainVariables < slae._rows; _mainVariables++)
@@ -176,7 +177,7 @@ namespace MatrixCalculator
                 writeLiner("Solution for this SLAE in vector form:");
 
                 var maxNameLength = VariableNames.Max(x => x.Length);
-                var leftVector = new Utilities.Vector<string>(VariableNames);
+                var namesVector = new Utilities.Vector<string>(VariableNames);
 
                 var centerLine = (VariableCount - 1) / 2;
                 Action<int, string> printSeparator = (line, separator) =>
@@ -184,14 +185,14 @@ namespace MatrixCalculator
 
                 for (int i = 0; i < VariableCount; i++)
                 {
-                    leftVector.PrintByRow(i, $",{-maxNameLength}", writer);
+                    namesVector.PrintByRow(i, $",{-maxNameLength}", writer);
                     printSeparator(i, "=");
-                    _particularSolution.Value.PrintByRow(i, valueFormat, writer);
+                    _particularSolution.Value.PrintByRow(i, valueFormat, writer, true);
 
                     foreach (var item in _solution)
                     {
                         printSeparator(i, $"-{item.Item2}");
-                        item.Item1.PrintByRow(i, valueFormat, writer);
+                        item.Item1.PrintByRow(i, valueFormat, writer, true);
                     }
                     writeLiner("");
                 }

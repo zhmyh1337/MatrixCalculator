@@ -23,10 +23,11 @@ namespace MatrixCalculator
         {
         }
 
+        public static MathProvider.IMathProvider<T> MathProvider { get => _mathProvider; }
+
         private readonly int _rows;
         private readonly int _columns;
         private T[,] _data;
-
-        private static MathProvider.IMathProvider<T> _mathProvider = MathProvider.Create<T>();
+        private static readonly MathProvider.IMathProvider<T> _mathProvider = Utilities.MathProvider.Create<T>();
     }
 }

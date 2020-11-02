@@ -51,6 +51,10 @@ namespace Utilities
             T Multiply(T a, T b);
             T Divide(T a, T b);
             bool IsZero(T value);
+            T ZeroIfTiny(T obj)
+            {
+                return IsZero(obj) ? Misc.ChangeType<T>(0) : obj;
+            }
         }
 
         class IntMathProvider : IMathProvider<int>
@@ -161,7 +165,7 @@ namespace Utilities
 
             public bool IsZero(float value)
             {
-                return value == 0f;
+                return Math.Abs(value) < 1e-5f;
             }
         }
 
@@ -189,7 +193,7 @@ namespace Utilities
 
             public bool IsZero(double value)
             {
-                return value == 0d;
+                return Math.Abs(value) < 1e-10d;
             }
         }
 
@@ -217,7 +221,7 @@ namespace Utilities
 
             public bool IsZero(decimal value)
             {
-                return value == 0m;
+                return Math.Abs(value) < 1e-15m;
             }
         }
     }
