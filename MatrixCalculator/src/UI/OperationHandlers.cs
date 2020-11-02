@@ -144,7 +144,7 @@ namespace UI
         /// </summary>
         public void Slae()
         {
-            var slae = _matrixReader.ReadMatrix("todo", x => x.CorrectSlae(), "This matrix is not a SLAE.");
+            var slae = _matrixReader.ReadMatrix("SLAE matrix (combined left and right sides):", x => x.CorrectSlae(), "This matrix is not a SLAE.");
             if (slae == null)
             {
                 return;

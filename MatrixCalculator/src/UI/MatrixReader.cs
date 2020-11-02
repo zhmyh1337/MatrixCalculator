@@ -61,8 +61,15 @@ namespace UI
             }
         }
 
+        private static bool firstReadFromFile = true;
         private static Matrix<T> ReadFromFile()
         {
+            if (firstReadFromFile)
+            {
+                Console.WriteLine("[Hint] File format is: count of rows and columns - on the first row, elements - on the others.");
+                firstReadFromFile = false;
+            }
+
             Matrix<T> matrix = null;
             while (matrix == null)
             {

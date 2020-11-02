@@ -156,6 +156,19 @@ namespace MatrixCalculator
                         _solution[i].Item1.Data[i + _mainVariables] = Utilities.Misc.ChangeType<T>(1);
                     }
                 }
+
+                SortSolution();
+            }
+
+            private void SortSolution()
+            {
+                foreach (var item in _solution)
+                {
+                    var oldVariableNames = VariableNames.Clone() as string[];
+                    Array.Sort(oldVariableNames, item.Item1.Data);
+                }
+                Array.Sort(VariableNames, _particularSolution.Value.Data);
+                Array.Sort(_solution, (x, y) => x.Item2.CompareTo(y.Item2));
             }
 
             public void PrintSolution(Action<string> writer, Action<string> writeLiner, string valueFormat)
@@ -196,6 +209,8 @@ namespace MatrixCalculator
                     }
                     writeLiner("");
                 }
+
+                writeLiner($"Where {string.Join(", ", _solution.Select(x => x.Item2))} are any numbers.");
             }
 
             public int VariableCount { get; }
