@@ -41,7 +41,7 @@ namespace MatrixCalculator
 
         public static string PrintFormat { get; set; } = $",{PrintFormatLength}:{PrintFormatSpecifier}{PrintFormatFloatingPoint}";
 
-        private const int PrintFormatLength = 8;
+        private const int PrintFormatLength = 10;
         private const char PrintFormatSpecifier = 'G';
         private const int PrintFormatFloatingPoint = 4;
         private const int MaxSizeForPrintingWithoutConfirm = 10;

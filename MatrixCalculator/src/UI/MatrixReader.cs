@@ -1,6 +1,5 @@
 ﻿using MatrixCalculator;
 using System;
-using System.Linq;
 using Utilities;
 
 namespace UI
