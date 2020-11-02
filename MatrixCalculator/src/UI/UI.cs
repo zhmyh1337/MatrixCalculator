@@ -3,7 +3,7 @@ using Utilities;
 
 namespace UI
 {
-    static class UI<T>
+    static class UI<T> where T : struct
     {
         public const ConsoleColor EmphasizeColor = ConsoleColor.Yellow;
 

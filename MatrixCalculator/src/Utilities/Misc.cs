@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace Utilities
 {
@@ -23,10 +24,10 @@ namespace Utilities
                 {
                     return (T)Enum.ToObject(typeof(T), input);
                 }
-                else if (typeof(T) == typeof(System.Numerics.BigInteger))
+                else if (typeof(T) == typeof(BigInteger))
                 {
                     // This works only with integers.
-                    return (T)(object)System.Numerics.BigInteger.Parse(input.ToString());
+                    return (T)(object)BigInteger.Parse(input.ToString());
                 }
                 else
                 {

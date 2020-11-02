@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MatrixCalculator
+﻿namespace MatrixCalculator
 {
     partial class Matrix<T>
     {
