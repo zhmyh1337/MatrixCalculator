@@ -152,7 +152,8 @@ namespace MatrixCalculator
                     _solution[i].Item1 = new Utilities.Vector<T>(VariableCount);
                     for (int j = 0; j < _mainVariables; j++)
                     {
-                        _solution[i].Item1.Data[j] = slae._data[j, i + _mainVariables];
+                        _solution[i].Item1.Data[j] = _mathProvider.Multiply(slae._data[j, i + _mainVariables],
+                            Utilities.Misc.ChangeType<T>(-1));
                         _solution[i].Item1.Data[i + _mainVariables] = Utilities.Misc.ChangeType<T>(1);
                     }
                 }
@@ -204,7 +205,7 @@ namespace MatrixCalculator
 
                     foreach (var item in _solution)
                     {
-                        printSeparator(i, $"-{item.Item2}");
+                        printSeparator(i, $"+{item.Item2}");
                         item.Item1.PrintByRow(i, valueFormat, writer, true);
                     }
                     writeLiner("");
