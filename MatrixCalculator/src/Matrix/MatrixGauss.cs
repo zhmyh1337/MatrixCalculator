@@ -79,7 +79,7 @@ namespace MatrixCalculator
 //                         PrintSteps($"Swap rows {i + 1} and {k + 1}.");
                         for (int l = j; l < result._columns; l++)
                         {
-                            (result._data[i, l], result._data[k, l]) = (result._data[k, l], result._data[i, j]);
+                            (result._data[i, l], result._data[k, l]) = (result._data[k, l], result._data[i, l]);
                         }
                     }
                 }
